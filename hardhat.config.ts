@@ -9,8 +9,6 @@ import "solidity-coverage";
 
 dotenv.config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
@@ -19,22 +17,31 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
-
 const config: HardhatUserConfig = {
   defaultNetwork: 'kovan',
   networks: {
     ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      url: process.env.ROPSTEN_URL ?? '',
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     kovan: {
-      url: process.env.KOVAN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      url: process.env.KOVAN_URL ?? '',
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
+    'thunder-testnet': {
+      url: 'https://testnet-rpc.thundercore.com',
+      chainId: 18,
+      gas: 30000000,
+      gasPrice: 1000000000,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
+    'thunder-mainnet': {
+      url: 'https://mainnet-rpc.thundercore.com',
+      chainId: 108,
+      gas: 30000000,
+      gasPrice: 1000000000,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    }
   },
   solidity: {
     version: "0.8.10",
@@ -42,8 +49,9 @@ const config: HardhatUserConfig = {
       optimizer: {
         enabled: true,
         runs: 200
-      }
-    }
+      },
+      // evmVersion: 'byzantium',
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
